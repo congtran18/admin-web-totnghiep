@@ -27,7 +27,7 @@ const ExtAndIntCommon = {
     justifyContent: 'space-between',
     transition: 'all 150ms ease-in',
     '&:hover': {
-        background: 'rgba(255, 255, 255, 0.08)',
+        background: 'rgba(140, 245, 39, 0.8)',
     },
     '&.compactNavItem': {
         overflow: 'hidden',
@@ -51,7 +51,7 @@ const InternalLink = styled(Box)(({ theme }) => ({
         color: theme.palette.text.primary,
     },
     '& .navItemActive': {
-        backgroundColor: 'rgba(255, 255, 255, 0.16)',
+        backgroundColor: 'rgba(255, 255, 255, 0.28)',
     },
 }))
 

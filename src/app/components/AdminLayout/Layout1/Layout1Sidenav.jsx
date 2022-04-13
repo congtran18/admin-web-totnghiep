@@ -47,6 +47,7 @@ const NavListBox = styled(Box)(() => ({
     flexDirection: 'column',
 }))
 
+
 const Layout1Sidenav = () => {
     const theme = useTheme()
     const { settings, updateSettings } = useSettings()
@@ -61,7 +62,7 @@ const Layout1Sidenav = () => {
                 return sideNavWidth
         }
     }
-    const primaryRGB = convertHexToRGB(theme.palette.primary.main)
+    const primaryRGB = convertHexToRGB('#CD0000')
 
     const updateSidebarMode = (sidebarSettings) => {
         updateSettings({

@@ -4,7 +4,7 @@ import { Chatbox } from 'app/components'
 import { ChatHead } from 'app/components'
 import { Span } from '../Typography'
 import { IconButton, Icon } from '@mui/material'
-import ShoppingCart from '../ShoppingCart/ShoppingCart'
+// import ShoppingCart from '../ShoppingCart/ShoppingCart'
 import AdminCustomizer from '../AdminCustomizer/AdminCustomizer'
 
 const SidebarRoot = styled('div')(({ theme, width }) => ({
@@ -46,7 +46,7 @@ const SecondarySidebarContent = () => {
         <SidebarRoot width={'50px'} className="secondary-sidebar">
             <Span sx={{ m: 'auto' }}></Span>
             <AdminCustomizer />
-            <ShoppingCart />
+            {/* <ShoppingCart /> */}
 
             <ChatHead
                 icon={

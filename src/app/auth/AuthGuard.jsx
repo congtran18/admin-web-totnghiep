@@ -2,7 +2,6 @@ import useAuth from 'app/hooks/useAuth'
 import { flat } from 'app/utils/utils'
 import React, { useState, useEffect, useContext } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import AppContext from '../contexts/AppContext'
 import { AllPages } from '../routes/routes'
 
 const getUserRoleAuthStatus = (pathname, user, routes) => {

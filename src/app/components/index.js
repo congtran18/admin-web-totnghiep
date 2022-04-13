@@ -26,3 +26,8 @@ export { default as AdminProgressBar } from './AdminProgressBar/AdminProgressBar
 export { default as SimpleCard } from './cards/SimpleCard'
 
 export { default as AdminLogo } from './AdminLogo/AdminLogo'
+
+export { default as InputField } from './Form-control/InputField'
+export { default as SelectField } from './Form-control/SelectField'
+export { default as UploadField } from './Form-control/UploadField'
+export { default as MultipleSelectField } from './Form-control/MultipleSelectField'

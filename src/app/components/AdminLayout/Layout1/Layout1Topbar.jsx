@@ -5,7 +5,7 @@ import useSettings from 'app/hooks/useSettings'
 import { styled, useTheme, Box } from '@mui/system'
 import { Span } from '../../../components/Typography'
 import { AdminMenu, AdminSearchBox } from 'app/components'
-import ShoppingCart from '../../ShoppingCart/ShoppingCart'
+// import ShoppingCart from '../../ShoppingCart/ShoppingCart'
 import NotificationBar from '../../NotificationBar/NotificationBar'
 import { themeShadows } from 'app/components/AdminTheme/themeColors'
 import { NotificationProvider } from 'app/contexts/NotificationContext'
@@ -18,6 +18,8 @@ import {
     Hidden,
 } from '@mui/material'
 import { topBarHeight } from 'app/utils/constant'
+import { useDispatch } from "react-redux";
+import { logout } from "app/features/auth/authSlice";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
     color: theme.palette.text.primary,
@@ -39,7 +41,7 @@ const TopbarContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    background: theme.palette.primary.main,
+    background: '#CD0000',
     [theme.breakpoints.down('sm')]: {
         paddingLeft: 16,
         paddingRight: 16,
@@ -87,7 +89,8 @@ const IconBox = styled('div')(({ theme }) => ({
 const Layout1Topbar = () => {
     const theme = useTheme()
     const { settings, updateSettings } = useSettings()
-    const { logout, user } = useAuth()
+    // const { logout, user } = useAuth()
+    const dispatch = useDispatch();
     const isMdScreen = useMediaQuery(theme.breakpoints.down('md'))
 
     const updateSidebarMode = (sidebarSettings) => {
@@ -113,6 +116,10 @@ const Layout1Topbar = () => {
                 layout1Settings.leftSidebar.mode === 'full' ? 'close' : 'full'
         }
         updateSidebarMode({ mode })
+    }
+
+    const haveLogout = () => {
+        dispatch(logout())
     }
 
     return (
@@ -143,20 +150,20 @@ const Layout1Topbar = () => {
                         <NotificationBar />
                     </NotificationProvider>
 
-                    <ShoppingCart />
+                    {/* <ShoppingCart /> */}
 
                     <AdminMenu
                         menuButton={
                             <UserMenu>
                                 <Hidden xsDown>
                                     <Span>
-                                        Hi <strong>{user.name}</strong>
+                                        {/* Hi <strong>{user.name}</strong> */}
                                     </Span>
                                 </Hidden>
-                                <Avatar
+                                {/* <Avatar
                                     src={user.avatar}
                                     sx={{ cursor: 'pointer' }}
-                                />
+                                /> */}
                             </UserMenu>
                         }
                     >
@@ -176,7 +183,7 @@ const Layout1Topbar = () => {
                             <Icon> settings </Icon>
                             <Span> Settings </Span>
                         </StyledItem>
-                        <StyledItem onClick={logout}>
+                        <StyledItem onClick={haveLogout}>
                             <Icon> power_settings_new </Icon>
                             <Span> Logout </Span>
                         </StyledItem>

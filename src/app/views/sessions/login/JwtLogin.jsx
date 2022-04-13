@@ -2,16 +2,19 @@ import {
     Card,
     Grid,
     Button,
-    Checkbox,
     CircularProgress,
-    FormControlLabel,
 } from '@mui/material'
-import React, { useState } from 'react'
-import useAuth from 'app/hooks/useAuth'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, styled, useTheme } from '@mui/system'
-import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
-import { Paragraph, Span } from 'app/components/Typography'
+import {  Span } from 'app/components/Typography'
+import { InputField } from 'app/components'
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import * as yup from 'yup';
+import { login, resetAll } from "app/features/auth/authSlice";
 
 const FlexBox = styled(Box)(() => ({
     display: 'flex',
@@ -49,37 +52,62 @@ const StyledProgress = styled(CircularProgress)(() => ({
     left: '25px',
 }))
 
-const JwtLogin = () => {
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState(false)
-    const [userInfo, setUserInfo] = useState({
-        email: 'jason@ui-lib.com',
-        password: 'dummyPass',
-    })
-    const [message, setMessage] = useState('')
-    const { login } = useAuth()
 
-    const handleChange = ({ target: { name, value } }) => {
-        let temp = { ...userInfo }
-        temp[name] = value
-        setUserInfo(temp)
-    }
+const schema = yup.object().shape({
+    username: yup
+        .string()
+        .required('Nhập tên đăng nhập')
+        .test('checkName', 'Tên cần lớn hơn 3 ký tự và nhỏ hơn 50 ký tự', (value) => value.trim().length >= 3 && value.trim().length <= 50),
+    password: yup
+        .string()
+        .required('Nhập mật khẩu')
+        .test('checkName', 'Tên cần lớn hơn 3 ký tự và nhỏ hơn 50 ký tự', (value) => value.trim().length >= 3 && value.trim().length <= 50),
+});
+
+const JwtLogin = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
+
+    const { user, isLoading, isError, isSuccess, message } = useSelector(
+        (state) => state.auth
+    );
+
+    useEffect(() => {
+        if (isError) {
+            toast.error("Kiểm tra lại thông tin đăng nhập");
+        }
+
+        if (user) {
+            navigate("/");
+        }
+
+        dispatch(resetAll());
+    }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+
+    const defaultValues = {
+        username: '',
+        password: '',
+    };
+
+    const {
+        control,
+        formState: { errors, isSubmitting },
+        handleSubmit,
+    } = useForm({
+        defaultValues,
+        resolver: yupResolver(schema),
+    });
 
     const { palette } = useTheme()
-    const textError = palette.error.main
     const textPrimary = palette.primary.main
 
-    const handleFormSubmit = async (event) => {
-        setLoading(true)
-        try {
-            await login(userInfo.email, userInfo.password)
-            navigate('/')
-        } catch (e) {
-            console.log(e)
-            setMessage(e.message)
-            setLoading(false)
-        }
-    }
+    const onHandleSubmit = async (data) => {
+        // console.log(data)
+        // toast.success("ok nhe")
+        dispatch(login(data));
+        // navigate('/dashboard/default')
+    };
 
     return (
         <JWTRoot>
@@ -94,75 +122,35 @@ const JwtLogin = () => {
                         </JustifyBox>
                     </Grid>
                     <Grid item lg={7} md={7} sm={7} xs={12}>
-                        <ContentBox>
-                            <ValidatorForm onSubmit={handleFormSubmit}>
-                                <TextValidator
-                                    sx={{ mb: 3, width: '100%' }}
-                                    variant="outlined"
-                                    size="small"
-                                    label="Email"
-                                    onChange={handleChange}
-                                    type="email"
-                                    name="email"
-                                    value={userInfo.email}
-                                    validators={['required', 'isEmail']}
-                                    errorMessages={[
-                                        'this field is required',
-                                        'email is not valid',
-                                    ]}
+                        <form onSubmit={handleSubmit(onHandleSubmit)}>
+                            <ContentBox>
+                                <InputField
+                                    control={control}
+                                    errors={errors}
+                                    name="username"
+                                    label="Username"
+                                    type="text"
                                 />
-                                <TextValidator
-                                    sx={{ mb: '12px', width: '100%' }}
-                                    label="Password"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={handleChange}
+                                <InputField
+                                    control={control}
+                                    errors={errors}
                                     name="password"
-                                    type="password"
-                                    value={userInfo.password}
-                                    validators={['required']}
-                                    errorMessages={['this field is required']}
+                                    label="Password"
+                                    type="text"
                                 />
-                                <FormControlLabel
-                                    sx={{ mb: '12px', maxWidth: 288 }}
-                                    name="agreement"
-                                    onChange={handleChange}
-                                    control={
-                                        <Checkbox
-                                            size="small"
-                                            onChange={({
-                                                target: { checked },
-                                            }) =>
-                                                handleChange({
-                                                    target: {
-                                                        name: 'agreement',
-                                                        value: checked,
-                                                    },
-                                                })
-                                            }
-                                            checked={userInfo.agreement || true}
-                                        />
-                                    }
-                                    label="Remeber me"
-                                />
-
-                                {message && (
-                                    <Paragraph sx={{ color: textError }}>
-                                        {message}
-                                    </Paragraph>
-                                )}
-
+                                <br />
+                                <br />
                                 <FlexBox mb={2} flexWrap="wrap">
                                     <Box position="relative">
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            disabled={loading}
+                                            disabled={isSubmitting}
                                             type="submit"
                                         >
                                             Sign in
                                         </Button>
-                                        {loading && (
+                                        {isLoading && (
                                             <StyledProgress
                                                 size={24}
                                                 className="buttonProgress"
@@ -187,8 +175,8 @@ const JwtLogin = () => {
                                 >
                                     Forgot password?
                                 </Button>
-                            </ValidatorForm>
-                        </ContentBox>
+                            </ContentBox>
+                        </form>
                     </Grid>
                 </Grid>
             </Card>

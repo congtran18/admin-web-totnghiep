@@ -4,16 +4,23 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import 'perfect-scrollbar/css/perfect-scrollbar.css'
 import * as serviceWorker from './serviceWorker'
+import { store } from 'app/features/store'
 import { StyledEngineProvider } from '@mui/styled-engine'
 import { CssBaseline } from '@mui/material'
+import { Provider } from 'react-redux'
+import { SettingsProvider } from 'app/contexts/SettingsContext'
 
 ReactDOM.render(
-    <StyledEngineProvider injectFirst>
-        <BrowserRouter>
-            <CssBaseline />
-            <App />
-        </BrowserRouter>
-    </StyledEngineProvider>,
+    <Provider store={store}>
+        <StyledEngineProvider injectFirst>
+            <BrowserRouter>
+                <CssBaseline />
+                <SettingsProvider>
+                    <App />
+                </SettingsProvider>
+            </BrowserRouter>
+        </StyledEngineProvider>
+    </Provider>,
     document.getElementById('root')
 )
 

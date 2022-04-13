@@ -11,7 +11,7 @@ export const navigations = [
     {
         name: 'Quản lý sản phẩm',
         icon: 'import_contacts',
-        path: '/material/slider',
+        path: '/products/manage',
     },
     {
         name: 'Quản lý đơn hàng',

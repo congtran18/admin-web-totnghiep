@@ -1,9 +1,9 @@
 import React from 'react'
 import { Span, Paragraph } from '../Typography'
-import useSettings from 'app/hooks/useSettings'
 import { Button, Toolbar, AppBar, ThemeProvider } from '@mui/material'
 import { styled, useTheme } from '@mui/system'
 import { topBarHeight } from 'app/utils/constant'
+import { createTheme } from '@mui/material'
 
 const AppFooter = styled(Toolbar)(() => ({
     display: 'flex',
@@ -34,14 +34,22 @@ const FooterContent = styled('div')(() => ({
 
 const Footer = () => {
     const theme = useTheme()
-    const { settings } = useSettings()
 
-    const footerTheme = settings.themes[settings.footer.theme] || theme
+    let footerTheme = createTheme({
+        palette: {
+            success: {
+                main: '#CD0000',
+            },
+            secondary: {
+                main: '#edf2ff',
+            },
+        },
+    });
 
     return (
         <ThemeProvider theme={footerTheme}>
             <AppBar
-                color="secondary"
+                color="success"
                 position="static"
                 sx={{ zIndex: 96 }}
             >
