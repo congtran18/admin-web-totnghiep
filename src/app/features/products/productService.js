@@ -2,7 +2,7 @@ import axios from "axios";
 
 import api from "../api/api"
 
-// Create new goal
+// Create new product
 const createProduct = async (productData, token) => {
   const config = {
     headers: {
@@ -15,7 +15,23 @@ const createProduct = async (productData, token) => {
   return response.data;
 };
 
-// Get user goals
+// Update product
+const updateProduct = async (id, productData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  console.log("updateProduct", productData)
+  const response = await api.patch(`/product/${id}`, productData, config);
+
+  // console.log("response",response)
+
+  return response.data;
+};
+
+// Get all products
 const getProducts = async (token, params) => {
   const config = {
     headers: {
@@ -25,28 +41,68 @@ const getProducts = async (token, params) => {
 
   const response = await api.get("/product", { params }, config);
 
-  console.log(response.data)
-
   return response.data;
 };
 
-// Delete user goal
-const deleteProduct = async (productId, token) => {
+const getRestoreProducts = async (token, params) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  const response = await api.delete("" + productId, config);
+  const response = await api.get("/product/restore", { params }, config);
 
   return response.data;
 };
 
+//Get product by id
+const getProductById = async (token, id) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await api.get(`/product/${id}`, config);
+
+  return response.data;
+};
+
+// Delete product by id
+const trackProduct = async (token ,id) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await api.get(`/product/track/${id}`, config);
+
+  return response;
+};
+
+// Remove forever product by id
+const removeProduct = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await api.delete(`/product/${id}`, config);
+
+  return response;
+};
+
 const productService = {
   createProduct,
+  updateProduct,
   getProducts,
-  deleteProduct,
+  getRestoreProducts,
+  trackProduct,
+  removeProduct,
+  getProductById
 };
 
 export default productService;

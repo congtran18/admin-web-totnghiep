@@ -27,7 +27,7 @@ const Error = styled('p')(({ theme }) => ({
   fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"',
 }))
 
-function SelectField({
+const SelectField = ({
   control,
   errors,
   label,
@@ -35,7 +35,7 @@ function SelectField({
   values,
   onChange,
   disable,
-}) {
+}) => {
 
   let theme = createTheme();
   const isError = !!errors[name]?.message;

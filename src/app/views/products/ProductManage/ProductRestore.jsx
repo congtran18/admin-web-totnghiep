@@ -17,8 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { toast } from "react-toastify";
-import { getProducts, getProductById } from "app/features/products/productSlice";
-import { FilterBy, SearchBox, AdminLoading, Confirm, ImagePreview } from "app/components"
+import { getRestoreProducts, getProductById } from "app/features/products/productSlice";
+import { FilterBy, SearchBox, AdminLoading, Confirm } from "app/components"
 
 const IconButton = styled(Icon)({
     fontSize: '14px',
@@ -35,7 +35,7 @@ const CustomPagination = styled(Box)({
     marginBottom: 5,
 });
 
-const ProductManage = () => {
+const ProductRestore = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -52,12 +52,11 @@ const ProductManage = () => {
     const [selectedIdProduct, setSelectedIdProduct] = useState(0)
     const [selectedCodeProduct, setSelectedCodeProduct] = useState(0)
     const [action, setAction] = useState(0)
-    const [showPreview, setShowPreview] = useState(true)
 
     useEffect(() => {
         (async () => {
             try {
-                dispatch(getProducts(queryParams));
+                dispatch(getRestoreProducts(queryParams));
                 // const { product, total } = result.payload;
                 // setProductList(results);
             } catch (error) {
@@ -210,15 +209,15 @@ const ProductManage = () => {
                                                 backgroundColor: 'rgb(104, 98, 98)',
                                             }
                                         }}
-                                        onClick={handleOpenUpdateModel.bind(this, product._id)}
-                                    ><img src='https://cdn4.iconfinder.com/data/icons/buno-info-signs/32/__edit_new_compose-256.png' alt='edit' width='24' height='24' /></Button>
+                                        onClick={handleOpenConfirm.bind(this, product._id, product.code, 2)}
+                                    ><img src='https://cdn3.iconfinder.com/data/icons/documents-1-1/32/Documents_Backup_Folder-128.png' alt='edit' width='24' height='24' /></Button>
                                     <Button
                                         sx={{
                                             "&:hover": {
                                                 backgroundColor: 'rgb(104, 98, 98)',
                                             }
                                         }}
-                                        onClick={handleOpenConfirm.bind(this, product._id, product.code, 1)}
+                                        onClick={handleOpenConfirm.bind(this, product._id, product.code, 3)}
                                     ><img src="https://cdn0.iconfinder.com/data/icons/ui-essence/32/_18ui-128.png" alt='delete' width='24' height='24' /></Button>
                                 </Grid>
                             </Grid>
@@ -249,7 +248,7 @@ const ProductManage = () => {
                             alignItems: 'center',
                         }}
                         >
-                            <h4 sx={{ fontSize: "medium" }}>Quản lý sản phẩm</h4>
+                            <h4 sx={{ fontSize: "medium" }}>Khôi phục sản phẩm</h4>
                         </Box>
 
                         <Divider sx={{ mb: 6 }} />
@@ -268,18 +267,10 @@ const ProductManage = () => {
                                     handleTypeSort={handleTypeSort}
                                     handleCategorySort={handleCategorySort}
                                 />
-                                <Button variant="contained" color="success" sx={{ width: '23vh', textAlign: 'center', fontSize: '14px' }} to={'/products/restore'} as={Link}>
-                                    Khôi phục
+                                <Button variant="contained" color="success" sx={{ width: '18vh', textAlign: 'center', fontSize: '14px' }} to={'/products/manage'} as={Link}>
+                                    Quản lí
                                     <IconButton>
-                                        cloud_download
-                                    </IconButton>
-                                </Button>
-                                <Button variant="contained" color="success" sx={{ ml: '5%', width: '18vh', textAlign: 'center', fontSize: '14px' }} onClick={() => {
-                                    setOpenPopupAdd(true);
-                                }}>
-                                    Thêm
-                                    <IconButton>
-                                        control_point
+                                        bookmark
                                     </IconButton>
                                 </Button>
                             </Box>
@@ -375,11 +366,6 @@ const ProductManage = () => {
                 codeProduct={selectedCodeProduct}
                 action={action}
             />
-            {/* <ImagePreview
-                openPreview={true}
-                setOpenPreview={setShowPreview}
-                imgUrl={'https://thumbs.dreamstime.com/b/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.jpg'}
-            /> */}
         </Box>
     )
 }
@@ -475,4 +461,4 @@ const dummyProductList = [
     },
 ]
 
-export default ProductManage
+export default ProductRestore

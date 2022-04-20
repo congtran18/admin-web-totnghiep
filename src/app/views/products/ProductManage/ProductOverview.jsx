@@ -8,8 +8,8 @@ import { styled, useTheme } from '@mui/system';
 
 const Image = styled('img')({
     borderRadius: 4,
-    width : 100,
-    marginRight : 10
+    width: 100,
+    marginRight: 12
 });
 
 const NameProduct = styled('h6')({
@@ -26,17 +26,23 @@ const NameAttribute = styled('p')({
     fontSize: 14,
 })
 
+const Status = styled('big')(({ theme, mode }) => ({
+    borderRadius: '1rem',
+    backgroundColor: mode === 'Mới' ? theme.palette.error.dark : mode === 'Bán chạy' ? theme.palette.info.main : theme.palette.text.disabled,
+    color: 'rgb(255 255 255)',
+    padding: '2px 0.5rem'
+}))
+
 const TextMute = styled('span')(({ theme }) => ({
-    color: 'secondary'
+    color: theme.palette.text.secondary
 }))
 
 const Text = styled('span')(({ theme }) => ({
-    fontSize: 'medium'
+    fontWeight: 500,
+    fontSize: '14px',
 }))
 
-const ProductOverview = ({ product: { realname, type, category, cost, image, status, include } }) => {
-
-    const theme = useTheme()
+const ProductOverview = ({ product: { realname, code, type, category, cost, discount, mainImage, status, include } }) => {
 
     const costFormat = (cost) => {
         var costlength;
@@ -55,12 +61,14 @@ const ProductOverview = ({ product: { realname, type, category, cost, image, sta
         <>
             <Grid item lg={4} md={4} sm={4} xs={4}>
                 <Box sx={{ display: 'flex' }}>
-                    <Image
-                        src={image[0].data}
-                        alt={realname}
-                        width={110}
-                        height={110}
-                    />
+                    {mainImage && 
+                        < Image
+                            src={mainImage}
+                            alt={realname}
+                            width={110}
+                            height={110}
+                        />
+                    }
                     <Box sx={{ display: 'flex-grow' }}>
                         <NameProduct>
                             {realname}
@@ -70,7 +78,7 @@ const ProductOverview = ({ product: { realname, type, category, cost, image, sta
                                 Mã:{' '}
                             </TextMute>
                             <Text >
-                                {'1213123123123'}
+                                {code}
                             </Text>
                         </NameAttribute>
                         <NameAttribute>
@@ -78,7 +86,7 @@ const ProductOverview = ({ product: { realname, type, category, cost, image, sta
                                 Thể loại:{' '}
                             </TextMute>
                             <Text>
-                                {type}
+                                {type.realname}
                             </Text>
                         </NameAttribute>
                         <NameAttribute>
@@ -86,7 +94,7 @@ const ProductOverview = ({ product: { realname, type, category, cost, image, sta
                                 Kiểu:{' '}
                             </TextMute>
                             <Text >
-                                {category}
+                                {category.realname}
                             </Text>
                         </NameAttribute>
                     </Box>
@@ -98,17 +106,11 @@ const ProductOverview = ({ product: { realname, type, category, cost, image, sta
                 md={2}
                 sm={2}
                 xs={2}
-                className="text-center"
+                sx={{ textAlign: 'center' }}
             >
-                <big className={
-					status === 'Mới'
-						? 'border-radius-4 bg-error text-white px-2 py-2px'
-						: status === 'Nổi bật'
-						? 'border-radius-4 bg-primary text-white px-2 py-2px'
-						: 'border-radius-4 bg-secondary text-white px-2 py-2px'
-				}>
-                        {status}
-                    </big>
+                <Status mode={status}>
+                    {status}
+                </Status>
             </Grid>
             <Grid
                 item
@@ -116,9 +118,9 @@ const ProductOverview = ({ product: { realname, type, category, cost, image, sta
                 md={2}
                 sm={2}
                 xs={2}
-                className="text-center"
+                sx={{ textAlign: 'center' }}
             >
-                <h6 className="m-0 text-15">{costFormat(cost)}đ</h6>
+                <Text >{costFormat(cost)}đ</Text>
             </Grid>
             <Grid
                 item
@@ -126,9 +128,9 @@ const ProductOverview = ({ product: { realname, type, category, cost, image, sta
                 md={2}
                 sm={2}
                 xs={2}
-                className="text-center"
+                sx={{ textAlign: 'center' }}
             >
-                <h6 className="m-0 text-15">{status}</h6>
+                <Text >{discount}</Text>
             </Grid>
         </>
 

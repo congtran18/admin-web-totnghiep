@@ -40,12 +40,13 @@ const multipleOption = [
     'Công thức',
 ]
 
-function MultipleSelectField({
+const MultipleSelectField = ({
     control,
     errors,
     label,
     name,
-}) {
+    include
+}) => {
 
     let theme = createTheme();
     const isError = !!errors[name]?.message;
@@ -102,14 +103,16 @@ function MultipleSelectField({
                     <Controller
                         control={control}
                         name={name}
-                        render={({ field: { onChange, value } }) => (
+                        render={({ field: { onChange } }) => (
                             <Select
+                                // {...field}  
                                 multiple
                                 onChange={(_, data) => {
                                     onChange(data);
                                     return data;
                                 }}
                                 limitTags={2}
+                                defaultValue={include}
                                 id="tags-outlined"
                                 options={multipleOption}
                                 getOptionLabel={(option) => option}
@@ -136,6 +139,7 @@ MultipleSelectField.propTypes = {
     errors: PropTypes.object,
     label: PropTypes.string,
     name: PropTypes.string,
+    include: PropTypes.string,
 };
 
 export default MultipleSelectField;
