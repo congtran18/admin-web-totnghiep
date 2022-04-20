@@ -8,6 +8,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
+    InputLabel,
     CircularProgress,
     DialogTitle
 } from '@mui/material'
@@ -18,17 +19,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { getTypes, resetAllType } from "app/features/types/typeSlice";
 import { saveImage } from "app/features/storage/storageSlice";
-import { createProduct } from "app/features/products/productSlice";
+import { getProducts, createProduct, resetProduct } from "app/features/products/productSlice";
 import { toast } from "react-toastify";
 
 
 const supportedImageFormat = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
 
 const listStatus = [
-    {'realname': 'Mới', '_id': 'Mới'},
-    {'realname': 'Nổi bật', '_id': 'Nổi bật'},
-    {'realname': 'Bán chạy', '_id': 'Bán chạy'},
-    {'realname': 'Bình thường', '_id': 'Bình thường'}
+    { 'realname': 'Mới', '_id': 'Mới' },
+    { 'realname': 'Nổi bật', '_id': 'Nổi bật' },
+    { 'realname': 'Bán chạy', '_id': 'Bán chạy' },
+    { 'realname': 'Bình thường', '_id': 'Bình thường' }
 ]
 
 const schema = yup.object().shape({
@@ -49,7 +50,7 @@ const schema = yup.object().shape({
     status: yup.string().required('Cần có trạng thái sản phẩm'),
     include: yup.array()
         .required('Cần có trạng thái sản phẩm').nullable(),
-    image: yup
+    mainImage: yup
         .mixed()
         .required('Cần thêm ảnh đại diện')
         .test('fileType', 'Chỉ chấp nhập file image', (value) => value && value[0] && supportedImageFormat.includes(value[0].type)),
@@ -65,10 +66,6 @@ const AddProductModal = ({ openPopup, setOpenPopup }) => {
         (state) => state.type
     );
 
-    const { dataStore } = useSelector(
-        (state) => state.storage
-    );
-
     const defaultValues = {
         realname: '',
         type: '',
@@ -76,7 +73,7 @@ const AddProductModal = ({ openPopup, setOpenPopup }) => {
         cost: 0,
         description: '',
         status: '',
-        image: null,
+        mainImage: null,
     };
 
     useEffect(() => {
@@ -104,7 +101,7 @@ const AddProductModal = ({ openPopup, setOpenPopup }) => {
         resolver: yupResolver(schema),
     });
 
-    const formCoverImageValue = watch('image');
+    const formCoverImageValue = watch('mainImage');
 
     const onTypeSelectChange = (id) => {
         const selectedCategory = 0;
@@ -130,15 +127,17 @@ const AddProductModal = ({ openPopup, setOpenPopup }) => {
 
             var imageData = new FormData();
 
-            imageData.append("file", data.image[0]);
+            imageData.append("file", data.mainImage[0]);
 
             let dataImage = await dispatch(saveImage(imageData));
 
-            dataImage = [{ data: dataImage.payload, index: 0 }]
+            dataImage = dataImage.payload
 
-            saveData.image = dataImage
+            saveData.mainImage = dataImage
 
-            dispatch(createProduct(saveData));
+            await dispatch(createProduct(saveData));
+
+            await dispatch(resetProduct());
 
         } catch (error) {
             toast.error(error)
@@ -203,6 +202,7 @@ const AddProductModal = ({ openPopup, setOpenPopup }) => {
                                         errors={errors}
                                         name="include"
                                         label="Bao gồm"
+                                        include={[]}
                                     />
                                     <InputField
                                         control={control}
@@ -230,7 +230,8 @@ const AddProductModal = ({ openPopup, setOpenPopup }) => {
                                         values={categories}
                                         disable={categories.length === 0}
                                     />
-                                    <UploadField control={control} register={register} errors={errors} name="image" value={formCoverImageValue} />
+                                    <InputLabel sx ={{ mb : '10px'}}>Thêm ảnh chính</InputLabel>
+                                    <UploadField control={control} register={register} errors={errors} name="mainImage" value={formCoverImageValue} />
                                 </Grid>
                             </Grid>
                             <DialogActions>
