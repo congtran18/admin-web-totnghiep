@@ -18,7 +18,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { toast } from "react-toastify";
 import { getProducts, getProductById } from "app/features/products/productSlice";
-import { FilterBy, SearchBox, AdminLoading, Confirm, ImagePreview } from "app/components"
+import { FilterBy, SearchBox, AdminLoading, Confirm } from "app/components"
 
 const IconButton = styled(Icon)({
     fontSize: '14px',
@@ -52,7 +52,6 @@ const ProductManage = () => {
     const [selectedIdProduct, setSelectedIdProduct] = useState(0)
     const [selectedCodeProduct, setSelectedCodeProduct] = useState(0)
     const [action, setAction] = useState(0)
-    const [showPreview, setShowPreview] = useState(true)
 
     useEffect(() => {
         (async () => {
@@ -76,8 +75,6 @@ const ProductManage = () => {
                 pathname: path,
                 search: queryString.stringify(newParams),
             };
-
-            console.log(newLocation)
 
             navigate(newLocation);
         } catch (error) {
@@ -268,7 +265,7 @@ const ProductManage = () => {
                                     handleTypeSort={handleTypeSort}
                                     handleCategorySort={handleCategorySort}
                                 />
-                                <Button variant="contained" color="success" sx={{ width: '23vh', textAlign: 'center', fontSize: '14px' }} to={'/products/restore'} as={Link}>
+                                <Button variant="contained" color="success" sx={{ width: '24vh', textAlign: 'center', fontSize: '14px' }} to={'/products/restore'} as={Link}>
                                     Khôi phục
                                     <IconButton>
                                         cloud_download

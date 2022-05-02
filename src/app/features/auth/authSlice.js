@@ -89,7 +89,6 @@ const authSlice = createSlice({
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.user = action.payload;
-                toast.success("Đăng nhập thành công!");
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false;

@@ -76,8 +76,6 @@ const ProductRestore = () => {
                 search: queryString.stringify(newParams),
             };
 
-            console.log(newLocation)
-
             navigate(newLocation);
         } catch (error) {
             toast.error(error)

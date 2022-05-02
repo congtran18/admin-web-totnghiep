@@ -8,7 +8,6 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    CircularProgress,
     InputLabel,
     DialogTitle
 } from '@mui/material'
@@ -17,9 +16,8 @@ import * as yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { getTypes, resetAllType } from "app/features/types/typeSlice";
 import { saveImage } from "app/features/storage/storageSlice";
-import { getProducts, updateProduct, resetProduct } from "app/features/products/productSlice";
+import { updateProduct, resetProduct } from "app/features/products/productSlice";
 import { toast } from "react-toastify";
 
 
@@ -58,7 +56,6 @@ const schema = yup.object().shape({
         .notRequired()
         .test('fileType', 'Chỉ chấp nhận file image', (value) => {
             if (value && isFile(value[0])) {
-                console.log("value[0]", value[0])
                 return SUPPORTED_FORMATS.includes(value[0].type);
             }
 
@@ -120,8 +117,6 @@ const UpdateProductModal = ({ openPopup, setOpenPopup, productData }) => {
 
     const renderedSlideImage = listImage.map((x) => {
         const indexImage = slideIndex.indexOf(x.index);
-        // console.log("indexImage", x)
-        // console.log("slideImage",slideImage)
         const result = indexImage > -1 ? { ...x, data: slideImage[indexImage].data } : x;
         return result;
     });
@@ -152,7 +147,6 @@ const UpdateProductModal = ({ openPopup, setOpenPopup, productData }) => {
         register,
         watch,
         setValue,
-        getValues,
         reset,
         formState: { errors, isSubmitting },
         handleSubmit,
@@ -204,14 +198,11 @@ const UpdateProductModal = ({ openPopup, setOpenPopup, productData }) => {
                     imageData.append("file", data.slideImage[i].data[0]);
                     let UpdateImage = await dispatch(saveImage(imageData));
                     dataImage = [...dataImage, { data: UpdateImage.payload, index: i }]
-                    console.log(dataImage)
                 }
                 if(data.slideImage[i].data && data.slideImage[i].data === "delete"){
                     dataImage = [...dataImage, { data: "delete", index: i }]
                 }
             }
-
-            console.log(dataImage)
 
             saveData.slideImage = dataImage
             await dispatch(updateProduct(saveData));
@@ -337,46 +328,11 @@ const UpdateProductModal = ({ openPopup, setOpenPopup, productData }) => {
                                                                 && renderedSlideImage[index]
                                                                 ? renderedSlideImage[index].data
                                                                 : null}
-                                                            // onDelete={() => handleOnDelete(index)}
-                                                        // onChangeFile={(e) => {
-                                                        //     console.log("abc", index)  
-                                                        //     handleOnChangeFile(e, index)
-                                                        // }}
                                                         />
                                                     </Grid>)
                                                 // };
                                             }
                                             )}
-                                            {/* {Array.from(new Array(5)).map((_, index) =>
-                                                slide[index] && slide[index] !== null ? (
-                                                    <Grid item xs={3} justifyContent="center" key={index}>
-                                                        <UploadField
-                                                            control={control}
-                                                            register={register}
-                                                            errors={errors}
-                                                            item={getValues("image")}
-                                                            index = {index}
-                                                            value={formCoverImageValue ? formCoverImageValue[index].data : null}
-                                                            name={`image.${index}.data`}
-                                                            imageSource={slide[index].data}
-                                                            onChangeFile={handleOnChangeFile}
-                                                        />
-                                                    </Grid>
-                                                ) : (
-                                                    <Grid item xs={3} key={index} >
-                                                        <UploadField
-                                                            control={control}
-                                                            register={register}
-                                                            errors={errors}
-                                                            index = {index}
-                                                            item={getValues("image")}
-                                                            value=""
-                                                            name={`image.${index}.data`}
-                                                            onChangeFile={handleOnChangeFile}
-                                                        />
-                                                    </Grid>
-                                                )
-                                            )} */}
                                         </Box>
                                     </Grid>
                                 </Grid>
@@ -394,7 +350,6 @@ const UpdateProductModal = ({ openPopup, setOpenPopup, productData }) => {
                                     disabled={isSubmitting}
                                     color="error"
                                     type="submit"
-                                // startIcon={isSubmitting && <CircularProgress size={20} />}
                                 >
                                     Cập nhật sản phẩm
                                 </Button>
