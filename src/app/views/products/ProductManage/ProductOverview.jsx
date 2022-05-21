@@ -120,7 +120,7 @@ const ProductOverview = ({ product: { realname, code, type, category, cost, disc
                 xs={2}
                 sx={{ textAlign: 'center' }}
             >
-                <Text >{costFormat(cost)}đ</Text>
+                <Text >{costFormat(cost.toString())}đ</Text>
             </Grid>
             <Grid
                 item

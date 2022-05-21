@@ -31,23 +31,6 @@ const IconGroup = styled(Box)(() => ({
   display: 'none',
 }))
 
-// const Slide = styled('img')(() => ({
-//   position: 'absolute',
-//   width: '100%',
-//   maxWidth: 200,
-//   height: 150,
-//   objectFit: 'cover',
-//   border: '1px solid #cccccc',
-//   top: 0,
-//   left: 0,
-//   '&:hover ': {
-//     filter: 'brightness(0.5)',
-//     '&$IconGroup': {
-//       display: 'flex',
-//     }
-//   },
-// }))
-
 const Slide = styled(Box)(({ theme, image, name }) => ({
   position: 'absolute',
   width: '100%',
@@ -69,15 +52,12 @@ const Slide = styled(Box)(({ theme, image, name }) => ({
   },
 }))
 
-
 const CustomButton = styled(Box)(() => ({
   position: 'absolute',
   left: '30%',
   top: '154px'
   // textAlign: 'center'
 }))
-
-
 
 const isFile = input => 'File' in window && input instanceof File;
 
@@ -88,11 +68,9 @@ const UploadField = ({ control, errors, name, register, imageSource, value, inde
 
   const handleOpenPreview = () => {
     setShowPreview(true)
-    console.log("handleOpenPreview", showPreview)
   }
 
   const handleDeleteImage = () => {
-    console.log("handleDeleteImage")
     setImage(null);
     setUploadImage(imagePlaceholder);
     if (imageSource) {

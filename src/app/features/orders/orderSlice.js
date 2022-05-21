@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import productService from "./productService";
+import orderService from "./orderService";
 import {
   toast
 } from "react-toastify";
 
 const initialState = {
-  products: [],
-  product: null,
+  orders: [],
+  order: null,
   total: 0,
   isError: false,
   isSuccess: false,
@@ -15,13 +15,13 @@ const initialState = {
   message: "",
 };
 
-// Create a new product
-export const createProduct = createAsyncThunk(
-  "products/post",
-  async (productData, thunkAPI) => {
+// Create a new order
+export const createOrder = createAsyncThunk(
+  "orders/post",
+  async (orderData, thunkAPI) => {
     try {
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.createProduct(productData, token);
+      return await orderService.createOrder(orderData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -34,14 +34,13 @@ export const createProduct = createAsyncThunk(
   }
 );
 
-export const updateProduct = createAsyncThunk(
-  "products/put",
-  async (productData, thunkAPI) => {
+export const updateOrder = createAsyncThunk(
+  "orders/put",
+  async (id, thunkAPI) => {
     try {
-      const { _id, ...rest} = productData
       // const token = thunkAPI.getState().auth.user.accessToken;
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.updateProduct(_id, rest, token);
+      return await orderService.updateOrder(token, id);
     } catch (error) {
       const message =
         (error.response &&
@@ -54,13 +53,13 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
-// Get all products
-export const getProducts = createAsyncThunk(
-  "products/getAll",
+// Get all orders
+export const getOrders = createAsyncThunk(
+  "orders/getAll",
   async (params, thunkAPI) => {
     try {
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.getProducts(token,params);
+      return await orderService.getOrders(token, params);
     } catch (error) {
       const message =
         (error.response &&
@@ -73,13 +72,13 @@ export const getProducts = createAsyncThunk(
   }
 );
 
-// Get all restore products
-export const getRestoreProducts = createAsyncThunk(
-  "products/getAllRestore",
+// Get all restore orders
+export const getRestoreOrders = createAsyncThunk(
+  "orders/getAllRestore",
   async (params, thunkAPI) => {
     try {
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.getRestoreProducts(token,params);
+      return await orderService.getRestoreOrders(token, params);
     } catch (error) {
       const message =
         (error.response &&
@@ -92,33 +91,13 @@ export const getRestoreProducts = createAsyncThunk(
   }
 );
 
-// Get product by id
-export const getProductById = createAsyncThunk(
-  "products/getById",
-  async (id, thunkAPI) => {
-    console.log("vo day")
-    try {
-      const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.getProductById(token,id);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-// Track product
-export const trackProduct = createAsyncThunk(
-  "products/track",
+// Get order by id
+export const getOrderById = createAsyncThunk(
+  "orders/getById",
   async (id, thunkAPI) => {
     try {
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.trackProduct(token ,id);
+      return await orderService.getOrderById(token, id);
     } catch (error) {
       const message =
         (error.response &&
@@ -131,12 +110,13 @@ export const trackProduct = createAsyncThunk(
   }
 );
 
-export const removeProduct = createAsyncThunk(
-  "products/remove",
+// Track order
+export const trackOrder = createAsyncThunk(
+  "orders/track",
   async (id, thunkAPI) => {
     try {
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.removeProduct(id, token);
+      return await orderService.trackOrder(token, id);
     } catch (error) {
       const message =
         (error.response &&
@@ -149,122 +129,140 @@ export const removeProduct = createAsyncThunk(
   }
 );
 
-const productSlice = createSlice({
-  name: "product",
+export const removeOrder = createAsyncThunk(
+  "orders/remove",
+  async (id, thunkAPI) => {
+    try {
+      const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
+      return await orderService.removeOrder(id, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+const orderSlice = createSlice({
+  name: "order",
   initialState,
   reducers: {
-    resetProduct: (state) => {
-      state.products= [];
-      state.total= 0;
-      state.isError= false;
-      state.isSuccess= false;
-      state.product = null;
-      state.isLoading= false;
-      state.message= "";
+    resetOrder: (state) => {
+      state.orders = [];
+      state.total = 0;
+      state.isError = false;
+      state.isSuccess = false;
+      state.order = null;
+      state.isLoading = false;
+      state.message = "";
       state.reload = !state.reload
-  },
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createProduct.pending, (state) => {
+      .addCase(createOrder.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createProduct.fulfilled, (state, action) => {
+      .addCase(createOrder.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // state.products.unshift(action.payload);
+        // state.orders.unshift(action.payload);
         toast.success("Thêm sản phẩm thành công!");
       })
-      .addCase(createProduct.rejected, (state, action) => {
+      .addCase(createOrder.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
         toast.success(state.message);
       })
-      .addCase(updateProduct.pending, (state) => {
+      .addCase(updateOrder.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateProduct.fulfilled, (state, action) => {
+      .addCase(updateOrder.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // state.products.unshift(action.payload);
+        // state.orders.unshift(action.payload);
         toast.success("Cập nhật sản phẩm thành công!");
       })
-      .addCase(updateProduct.rejected, (state, action) => {
+      .addCase(updateOrder.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
         toast.success(state.message);
       })
-      .addCase(getProducts.pending, (state) => {
+      .addCase(getOrders.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getProducts.fulfilled, (state, action) => {
+      .addCase(getOrders.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.products = action.payload.product;
-        state.total = action.payload.total;
+        state.orders = action.payload.order;
+        state.total = action.payload.totalpage;
         state.isLoading = false;
       })
-      .addCase(getProducts.rejected, (state, action) => {
+      .addCase(getOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(getRestoreProducts.pending, (state) => {
+      .addCase(getRestoreOrders.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getRestoreProducts.fulfilled, (state, action) => {
+      .addCase(getRestoreOrders.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.products = action.payload.product;
+        state.orders = action.payload.order;
         state.total = action.payload.total;
         state.isLoading = false;
       })
-      .addCase(getRestoreProducts.rejected, (state, action) => {
+      .addCase(getRestoreOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(getProductById.pending, (state) => {
+      .addCase(getOrderById.pending, (state) => {
         // state.isLoading = true;
       })
-      .addCase(getProductById.fulfilled, (state, action) => {
+      .addCase(getOrderById.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.product = action.payload;
+        state.order = action.payload;
         // state.isLoading = false;
       })
-      .addCase(getProductById.rejected, (state, action) => {
+      .addCase(getOrderById.rejected, (state, action) => {
         // state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(trackProduct.pending, (state) => {
+      .addCase(trackOrder.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(trackProduct.fulfilled, (state, action) => {
+      .addCase(trackOrder.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         // toast.success("Xoá tạm thời sản phẩm thành công!");
-        // state.products = state.products.filter(
-        //   (product) => product._id !== action.payload.id
+        // state.orders = state.orders.filter(
+        //   (order) => order._id !== action.payload.id
         // );
       })
-      .addCase(trackProduct.rejected, (state, action) => {
+      .addCase(trackOrder.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(removeProduct.pending, (state) => {
+      .addCase(removeOrder.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(removeProduct.fulfilled, (state, action) => {
+      .addCase(removeOrder.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         toast.success("Xoá vĩnh viễn sản phẩm thành công!");
-        // state.products = state.products.filter(
-        //   (product) => product._id !== action.payload.id
+        // state.orders = state.orders.filter(
+        //   (order) => order._id !== action.payload.id
         // );
       })
-      .addCase(removeProduct.rejected, (state, action) => {
+      .addCase(removeOrder.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -272,5 +270,5 @@ const productSlice = createSlice({
   },
 });
 
-export const { resetProduct } = productSlice.actions;
-export default productSlice.reducer;
+export const { resetOrder } = orderSlice.actions;
+export default orderSlice.reducer;

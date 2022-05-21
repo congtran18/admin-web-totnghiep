@@ -10,7 +10,7 @@ import {
     DialogTitle,
 } from '@mui/material'
 
-import { trackProduct, resetProduct, removeProduct } from "app/features/products/productSlice";
+import { trackOrder, resetOrder, removeOrder, updateOrder } from "app/features/orders/orderSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -24,28 +24,32 @@ const IconCustom = styled(ErrorOutlineIcon)({
     verticalAlign: 'middle',
 });
 
-const Confirm = ({ openConfirm, setOpenConfirm, idProduct, codeProduct, action }) => {
+const ConfirmOrder = ({ openConfirm, setOpenConfirm, idOrder, action }) => {
 
     const dispatch = useDispatch();
 
     const onHandleConfirm = async () => {
         try {
-            if (action !== 3) {
-                await dispatch(trackProduct(idProduct));
-                await dispatch(resetProduct());
-                if (action === 1) {
-                    toast.success("Xoá tạm thời sản phẩm thành công")
+            if (action === 1) {
+                await dispatch(updateOrder(idOrder));
+                await dispatch(resetOrder());
+            }
+            else if (action !== 4) {
+                await dispatch(trackOrder(idOrder));
+                await dispatch(resetOrder());
+                if (action === 2) {
+                    toast.success("Xoá tạm thời hóa đơn thành công")
                 } else {
-                    toast.success("Khôi phục sản phẩm thành công")
+                    toast.success("Khôi phục hóa đơn thành công")
                 }
             } else {
-                await dispatch(removeProduct(idProduct));
-                await dispatch(resetProduct());
+                await dispatch(removeOrder(idOrder));
+                await dispatch(resetOrder());
             }
         } catch (error) {
-            toast.error("Lỗi khi xoá sản phẩm")
+            toast.error("Lỗi khi xoá hóa đơn")
         }
-        // await dispatch(resetProduct());
+        // await dispatch(resetOrder());
         closeConfirm();
     };
 
@@ -72,7 +76,7 @@ const Confirm = ({ openConfirm, setOpenConfirm, idProduct, codeProduct, action }
                 </DialogTitle>
                 <DialogContent dividers>
                     <DialogContentText>
-                        <IconCustom /> Xác nhận {action === 1 ? "xoá" : action === 2 ? "khôi phục" : "xoá vĩnh viễn"} sản phẩm có mã <span style={{ color: 'black' }}>{codeProduct}</span>
+                        <IconCustom /> Xác nhận {action === 1 ? "cập nhật" : action === 2 ? "xóa" : action === 3 ? "khôi phục" : "xoá vĩnh viễn"} hóa đơn có mã <span style={{ color: 'black' }}>{idOrder}</span>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -83,7 +87,7 @@ const Confirm = ({ openConfirm, setOpenConfirm, idProduct, codeProduct, action }
                         type="submit"
                     // startIcon={isSubmitting && <CircularProgress size={20} />}
                     >
-                        {action === 1 ? "xoá" : action === 2 ? "khôi phục" : "xoá vĩnh viễn"} sản phẩm
+                        {action === 1 ? "cập nhật" : action === 2 ? "xóa" : action === 3 ? "khôi phục" : "xoá vĩnh viễn"} hóa đơn
                     </Button>
                     <Button
                         variant="contained"
@@ -99,4 +103,4 @@ const Confirm = ({ openConfirm, setOpenConfirm, idProduct, codeProduct, action }
 
 }
 
-export default Confirm
+export default ConfirmOrder

@@ -1,6 +1,8 @@
 import axios from "axios";
 import api from "../api/api"
-
+import {
+  toast
+} from "react-toastify";
 
 // Register User
 const register = async (userData) => {
@@ -17,16 +19,19 @@ const register = async (userData) => {
 const login = async (userData) => {
   const response = await api.post("/auth/login", userData);
 
-  if (response.data) {
+  if (response.data && (response.data.role === "owner" || response.data.role === "admin")) {
     localStorage.setItem("user", JSON.stringify(response.data));
+    toast.success("Đăng nhập thành công!");
+    return response.data
   }
 
-  return response.data;
+  toast.error("Kiểm tra lại thông tin đăng nhập!");
+  return null;
 };
 
 // Logout user
 const logout = () => {
-  localStorage.removeItem("user");
+  // localStorage.removeItem("user");
 };
 
 const authService = {

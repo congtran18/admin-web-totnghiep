@@ -21,6 +21,8 @@ import { getTypes, resetAllType } from "app/features/types/typeSlice";
 import { saveImage } from "app/features/storage/storageSlice";
 import { getProducts, createProduct, resetProduct } from "app/features/products/productSlice";
 import { toast } from "react-toastify";
+import { useNavigate, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 
 
 const supportedImageFormat = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
@@ -41,12 +43,13 @@ const schema = yup.object().shape({
     category: yup.string().required('Cần có danh mục sản phẩm'),
     cost: yup
         .number('Chỉ được nhập số')
+        .typeError('Giá tiền phải là số')
         .required('Cần nhập giá sản phẩm')
         .min(1000, 'Giá tiền cần lớn hơn 1.000 đ')
         .max(10000000000, 'Giá tiền quá giới hạn'),
     description: yup.string()
         .required('Cần có mô tả sản phẩm')
-        .test('checkDescription', 'Miêu tả cần nhỏ hơn 100 ký tự', (value) => value.trim().length > 0 && value.trim().length <= 100),
+        .test('checkDescription', 'Miêu tả cần nhỏ hơn 1000 ký tự', (value) => value.trim().length > 0 && value.trim().length <= 1000),
     status: yup.string().required('Cần có trạng thái sản phẩm'),
     include: yup.array()
         .required('Cần có trạng thái sản phẩm').nullable(),
@@ -57,6 +60,10 @@ const schema = yup.object().shape({
 });
 
 const AddProductModal = ({ openPopup, setOpenPopup }) => {
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const queryParams = queryString.parse(location.search);
 
     const [categories, setCategories] = useState([]);
 
@@ -70,7 +77,7 @@ const AddProductModal = ({ openPopup, setOpenPopup }) => {
         realname: '',
         type: '',
         category: '',
-        cost: 0,
+        cost: '',
         description: '',
         status: '',
         mainImage: null,
@@ -120,7 +127,16 @@ const AddProductModal = ({ openPopup, setOpenPopup }) => {
     };
 
     const onHandleSubmit = async (data) => {
+        const newParams = { ...queryParams, page: 1 };
+        const path = location.pathname;
+
+        const newLocation = {
+            pathname: path,
+            search: queryString.stringify(newParams),
+        };
         try {
+            //ve trang 1
+            //luu data
             const saveData = { ...data };
             saveData.realname = data.realname.trim();
             saveData.description = data.description.trim();
@@ -142,8 +158,14 @@ const AddProductModal = ({ openPopup, setOpenPopup }) => {
         } catch (error) {
             toast.error(error)
         }
+        // await new Promise((res) => {
+        //     setTimeout(() => {
+        //         res();
+        //     }, 100);
+        // });
         reset(defaultValues);
         closePopup();
+        navigate(newLocation);
     };
 
     const closePopup = async () => {
@@ -230,7 +252,7 @@ const AddProductModal = ({ openPopup, setOpenPopup }) => {
                                         values={categories}
                                         disable={categories.length === 0}
                                     />
-                                    <InputLabel sx ={{ mb : '10px'}}>Thêm ảnh chính</InputLabel>
+                                    <InputLabel sx={{ mb: '10px' }}>Thêm ảnh chính</InputLabel>
                                     <UploadField control={control} register={register} errors={errors} name="mainImage" value={formCoverImageValue} />
                                 </Grid>
                             </Grid>

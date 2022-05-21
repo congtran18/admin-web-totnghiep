@@ -76,8 +76,6 @@ const ProductRestore = () => {
                 search: queryString.stringify(newParams),
             };
 
-            console.log(newLocation)
-
             navigate(newLocation);
         } catch (error) {
             toast.error(error)
@@ -276,7 +274,7 @@ const ProductRestore = () => {
                             </Box>
 
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
-                                <SearchBox onChange={handleSearch} />
+                                <SearchBox onChange={handleSearch} label={"sản phẩm"}/>
                             </Box>
                         </Box>
 
