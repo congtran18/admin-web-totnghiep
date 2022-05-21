@@ -14,9 +14,14 @@ export const navigations = [
         path: '/products/manage',
     },
     {
-        name: 'Quản lý đơn hàng',
+        name: 'Quản lý đơn hàng sách',
         icon: 'event_note',
-        path: '/Orders/manage',
+        path: '/orderbook/manage',
+    },
+    {
+        name: 'Quản lý đơn khóa học',
+        icon: 'local_library',
+        path: '/ordercourse/manage',
     },
     {
         name: 'Quản lý gia sư',
@@ -44,9 +49,9 @@ export const navigations = [
             },
         ],
     },
-    {
-        name: 'Quản lý khoá học',
-        icon: 'local_library',
-        path: '/users/manage',
-    }, 
+    // {
+    //     name: 'Quản lý khoá học',
+    //     icon: 'local_library',
+    //     path: '/users/manage',
+    // }, 
 ]

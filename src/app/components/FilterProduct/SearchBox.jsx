@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
 
-export default function SearchBox({ onChange }) {
+export default function SearchBox({ onChange, label }) {
     const location = useLocation();
     const timestampRef = useRef(null);
 
@@ -41,7 +41,7 @@ export default function SearchBox({ onChange }) {
                 variant="outlined"
                 size="small"
                 style={{ width: '20rem' }}
-                placeholder="Tìm kiếm sản phẩm..."
+                placeholder={`Tìm kiếm ${label}...`}
                 onChange={handleChange}
 
                 InputProps={{
@@ -59,4 +59,5 @@ export default function SearchBox({ onChange }) {
 
 SearchBox.propTypes = {
     onChange: PropTypes.func,
+    label: PropTypes.string
 };

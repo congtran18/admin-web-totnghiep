@@ -3,6 +3,8 @@ import chartsRoute from 'app/views/charts/ChartsRoute'
 import materialRoutes from 'app/views/material-kit/MaterialRoutes'
 import dashboardRoutes from 'app/views/dashboard/DashboardRoutes'
 import ProductsRoutes from 'app/views/products/ProductsRoutes'
+import UsersRoutes from 'app/views/users/UsersRoutes'
+import OrdersRoutes from 'app/views/orders/OrdersRoutes'
 import sessionRoutes from 'app/views/sessions/SessionRoutes'
 import AdminLayout from '../components/AdminLayout/AdminLayout'
 import { Navigate } from 'react-router-dom'
@@ -16,7 +18,7 @@ export const AllPages = () => {
                     <AdminLayout />
                 </PrivateRoute>
             ),
-            children: [...dashboardRoutes,...ProductsRoutes, ...chartsRoute, ...materialRoutes],
+            children: [...dashboardRoutes,...ProductsRoutes, ...UsersRoutes,...chartsRoute, ...materialRoutes, ...OrdersRoutes],
         },
         ...sessionRoutes,
         {

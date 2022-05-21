@@ -46,7 +46,7 @@ const schema = yup.object().shape({
         .max(10000000000, 'Giá tiền quá giới hạn'),
     description: yup.string()
         .required('Cần có mô tả sản phẩm')
-        .test('checkDescription', 'Miêu tả cần nhỏ hơn 100 ký tự', (value) => value.trim().length > 0 && value.trim().length <= 100),
+        .test('checkDescription', 'Miêu tả cần nhỏ hơn 1000 ký tự', (value) => value.trim().length > 0 && value.trim().length <= 1000),
     status: yup.string().required('Cần có trạng thái sản phẩm'),
     include: yup.array()
         .required('Cần có trạng thái sản phẩm').nullable(),

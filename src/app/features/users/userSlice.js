@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import productService from "./productService";
+import userService from "./userService";
 import {
   toast
 } from "react-toastify";
 
 const initialState = {
-  products: [],
-  product: null,
+  users: [],
+  user: null,
   total: 0,
   isError: false,
   isSuccess: false,
@@ -15,13 +15,13 @@ const initialState = {
   message: "",
 };
 
-// Create a new product
-export const createProduct = createAsyncThunk(
-  "products/post",
-  async (productData, thunkAPI) => {
+// Create a new user
+export const createUser = createAsyncThunk(
+  "users/post",
+  async (userData, thunkAPI) => {
     try {
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.createProduct(productData, token);
+      return await userService.createUser(userData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -34,14 +34,14 @@ export const createProduct = createAsyncThunk(
   }
 );
 
-export const updateProduct = createAsyncThunk(
-  "products/put",
-  async (productData, thunkAPI) => {
+export const updateUser = createAsyncThunk(
+  "users/put",
+  async (userData, thunkAPI) => {
     try {
-      const { _id, ...rest} = productData
+      const { _id, ...rest} = userData
       // const token = thunkAPI.getState().auth.user.accessToken;
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.updateProduct(_id, rest, token);
+      return await userService.updateUser(_id, rest, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -54,13 +54,13 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
-// Get all products
-export const getProducts = createAsyncThunk(
-  "products/getAll",
+// Get all users
+export const getUsers = createAsyncThunk(
+  "users/getAll",
   async (params, thunkAPI) => {
     try {
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.getProducts(token,params);
+      return await userService.getUsers(token,params);
     } catch (error) {
       const message =
         (error.response &&
@@ -73,13 +73,13 @@ export const getProducts = createAsyncThunk(
   }
 );
 
-// Get all restore products
-export const getRestoreProducts = createAsyncThunk(
-  "products/getAllRestore",
+// Get all restore users
+export const getRestoreUsers = createAsyncThunk(
+  "users/getAllRestore",
   async (params, thunkAPI) => {
     try {
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.getRestoreProducts(token,params);
+      return await userService.getRestoreUsers(token,params);
     } catch (error) {
       const message =
         (error.response &&
@@ -92,14 +92,14 @@ export const getRestoreProducts = createAsyncThunk(
   }
 );
 
-// Get product by id
-export const getProductById = createAsyncThunk(
-  "products/getById",
+// Get user by id
+export const getUserById = createAsyncThunk(
+  "users/getById",
   async (id, thunkAPI) => {
     console.log("vo day")
     try {
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.getProductById(token,id);
+      return await userService.getUserById(token,id);
     } catch (error) {
       const message =
         (error.response &&
@@ -112,13 +112,13 @@ export const getProductById = createAsyncThunk(
   }
 );
 
-// Track product
-export const trackProduct = createAsyncThunk(
-  "products/track",
+// Track user
+export const trackUser = createAsyncThunk(
+  "users/track",
   async (id, thunkAPI) => {
     try {
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.trackProduct(token ,id);
+      return await userService.trackUser(token ,id);
     } catch (error) {
       const message =
         (error.response &&
@@ -131,12 +131,12 @@ export const trackProduct = createAsyncThunk(
   }
 );
 
-export const removeProduct = createAsyncThunk(
-  "products/remove",
+export const removeUser = createAsyncThunk(
+  "users/remove",
   async (id, thunkAPI) => {
     try {
       const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
-      return await productService.removeProduct(id, token);
+      return await userService.removeUser(id, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -149,16 +149,16 @@ export const removeProduct = createAsyncThunk(
   }
 );
 
-const productSlice = createSlice({
-  name: "product",
+const userSlice = createSlice({
+  name: "user",
   initialState,
   reducers: {
-    resetProduct: (state) => {
-      state.products= [];
+    resetUser: (state) => {
+      state.users= [];
       state.total= 0;
       state.isError= false;
       state.isSuccess= false;
-      state.product = null;
+      state.user = null;
       state.isLoading= false;
       state.message= "";
       state.reload = !state.reload
@@ -166,105 +166,105 @@ const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createProduct.pending, (state) => {
+      .addCase(createUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createProduct.fulfilled, (state, action) => {
+      .addCase(createUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // state.products.unshift(action.payload);
+        state.users.unshift(action.payload);
         toast.success("Thêm sản phẩm thành công!");
       })
-      .addCase(createProduct.rejected, (state, action) => {
+      .addCase(createUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
         toast.success(state.message);
       })
-      .addCase(updateProduct.pending, (state) => {
+      .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateProduct.fulfilled, (state, action) => {
+      .addCase(updateUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // state.products.unshift(action.payload);
+        state.users.unshift(action.payload);
         toast.success("Cập nhật sản phẩm thành công!");
       })
-      .addCase(updateProduct.rejected, (state, action) => {
+      .addCase(updateUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
         toast.success(state.message);
       })
-      .addCase(getProducts.pending, (state) => {
+      .addCase(getUsers.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getProducts.fulfilled, (state, action) => {
+      .addCase(getUsers.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.products = action.payload.product;
-        state.total = action.payload.total;
+        state.users = action.payload.role_user;
+        state.total = action.payload.count.length  > 0 ? action.payload.count[0].totalCount : 1 ;
         state.isLoading = false;
       })
-      .addCase(getProducts.rejected, (state, action) => {
+      .addCase(getUsers.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(getRestoreProducts.pending, (state) => {
+      .addCase(getRestoreUsers.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getRestoreProducts.fulfilled, (state, action) => {
+      .addCase(getRestoreUsers.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.products = action.payload.product;
+        state.users = action.payload.user;
         state.total = action.payload.total;
         state.isLoading = false;
       })
-      .addCase(getRestoreProducts.rejected, (state, action) => {
+      .addCase(getRestoreUsers.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(getProductById.pending, (state) => {
+      .addCase(getUserById.pending, (state) => {
         // state.isLoading = true;
       })
-      .addCase(getProductById.fulfilled, (state, action) => {
+      .addCase(getUserById.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.product = action.payload;
+        state.user = action.payload;
         // state.isLoading = false;
       })
-      .addCase(getProductById.rejected, (state, action) => {
+      .addCase(getUserById.rejected, (state, action) => {
         // state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(trackProduct.pending, (state) => {
+      .addCase(trackUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(trackProduct.fulfilled, (state, action) => {
+      .addCase(trackUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         // toast.success("Xoá tạm thời sản phẩm thành công!");
-        // state.products = state.products.filter(
-        //   (product) => product._id !== action.payload.id
-        // );
+        state.users = state.users.filter(
+          (user) => user._id !== action.payload.id
+        );
       })
-      .addCase(trackProduct.rejected, (state, action) => {
+      .addCase(trackUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(removeProduct.pending, (state) => {
+      .addCase(removeUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(removeProduct.fulfilled, (state, action) => {
+      .addCase(removeUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         toast.success("Xoá vĩnh viễn sản phẩm thành công!");
-        // state.products = state.products.filter(
-        //   (product) => product._id !== action.payload.id
+        // state.users = state.users.filter(
+        //   (user) => user._id !== action.payload.id
         // );
       })
-      .addCase(removeProduct.rejected, (state, action) => {
+      .addCase(removeUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -272,5 +272,5 @@ const productSlice = createSlice({
   },
 });
 
-export const { resetProduct } = productSlice.actions;
-export default productSlice.reducer;
+export const { resetUser } = userSlice.actions;
+export default userSlice.reducer;

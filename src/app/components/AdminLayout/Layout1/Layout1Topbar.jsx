@@ -160,10 +160,10 @@ const Layout1Topbar = () => {
                                         {/* Hi <strong>{user.name}</strong> */}
                                     </Span>
                                 </Hidden>
-                                {/* <Avatar
-                                    src={user.avatar}
+                                <Avatar
+                                    src={"https://icons.iconarchive.com/icons/aha-soft/free-large-boss/512/Admin-icon.png"}
                                     sx={{ cursor: 'pointer' }}
-                                /> */}
+                                />
                             </UserMenu>
                         }
                     >

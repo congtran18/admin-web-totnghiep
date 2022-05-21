@@ -8,10 +8,12 @@ import {
 } from "react-toastify";
 
 // Get user from localStorate
-const user = JSON.parse(localStorage.getItem("user"));
+// const user = JSON.parse(localStorage.getItem("user"));
+
+// const user = JSON.parse(JSON.parse(localStorage.getItem("persist:root"))?.auth)?.user;
 
 const initialState = {
-    user: user ? user : null,
+    user: null,
     isError: false,
     isSuccess: false,
     isLoading: false,

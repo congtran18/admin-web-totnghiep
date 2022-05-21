@@ -38,8 +38,6 @@ const H4 = styled('h4')(({ theme }) => ({
 const Analytics = () => {
     const { palette } = useTheme()
 
-    console.log("vo day Analytics");
-
     return (
         <Fragment>
             <ContentBox className="analytics">

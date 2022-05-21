@@ -37,12 +37,13 @@ const IMG = styled('img')(() => ({
 }))
 
 const JWTRoot = styled(JustifyBox)(() => ({
-    background: '#1A2038',
+    backgroundImage: `url(${"https://cutewallpaper.org/21/website-wallpaper/Image-for-Game-Developer-Office-Wallpaper-Desktop-in-2019-.jpg"})`,
     minHeight: '100% !important',
     '& .card': {
         maxWidth: 800,
         borderRadius: 12,
         margin: '1rem',
+            opacity: 0.7,
     },
 }))
 
@@ -54,8 +55,9 @@ const StyledProgress = styled(CircularProgress)(() => ({
 
 
 const schema = yup.object().shape({
-    username: yup
+    email: yup
         .string()
+        .email("Định dạng email")
         .required('Nhập tên đăng nhập')
         .test('checkName', 'Tên cần lớn hơn 3 ký tự và nhỏ hơn 50 ký tự', (value) => value.trim().length >= 3 && value.trim().length <= 50),
     password: yup
@@ -86,7 +88,7 @@ const JwtLogin = () => {
 
 
     const defaultValues = {
-        username: '',
+        email: '',
         password: '',
     };
 
@@ -116,7 +118,7 @@ const JwtLogin = () => {
                     <Grid item lg={5} md={5} sm={5} xs={12}>
                         <JustifyBox p={4} height="100%">
                             <IMG
-                                src="/assets/images/illustrations/dreamer.svg"
+                                src="/assets/images/illustrations/admin4.jpg"
                                 alt=""
                             />
                         </JustifyBox>
@@ -127,8 +129,8 @@ const JwtLogin = () => {
                                 <InputField
                                     control={control}
                                     errors={errors}
-                                    name="username"
-                                    label="Username"
+                                    name="email"
+                                    label="email"
                                     type="text"
                                 />
                                 <InputField
@@ -148,7 +150,7 @@ const JwtLogin = () => {
                                             disabled={isSubmitting}
                                             type="submit"
                                         >
-                                            Sign in
+                                            Đăng nhập
                                         </Button>
                                         {isLoading && (
                                             <StyledProgress
@@ -157,7 +159,7 @@ const JwtLogin = () => {
                                             />
                                         )}
                                     </Box>
-                                    <Span sx={{ mr: 1, ml: '20px' }}>or</Span>
+                                    {/* <Span sx={{ mr: 1, ml: '20px' }}>or</Span>
                                     <Button
                                         sx={{ textTransform: 'capitalize' }}
                                         onClick={() =>
@@ -165,16 +167,16 @@ const JwtLogin = () => {
                                         }
                                     >
                                         Sign up
-                                    </Button>
+                                    </Button> */}
                                 </FlexBox>
-                                <Button
+                                {/* <Button
                                     sx={{ color: textPrimary }}
                                     onClick={() =>
                                         navigate('/session/forgot-password')
                                     }
                                 >
                                     Forgot password?
-                                </Button>
+                                </Button> */}
                             </ContentBox>
                         </form>
                     </Grid>

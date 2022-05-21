@@ -8,17 +8,15 @@ import {
     Button,
     Pagination,
 } from '@mui/material'
-import ProductOverview from './ProductOverview'
+import UserOverview from './UserOverview'
 import { Link, } from 'react-router-dom'
 import { styled } from '@mui/system'
-import AddProductModal from './AddProductModal'
-import UpdateProductModal from './UpdateProductModal'
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { toast } from "react-toastify";
-import { getProducts, getProductById } from "app/features/products/productSlice";
-import { FilterBy, SearchBox, AdminLoading, Confirm } from "app/components"
+import { getUsers, getUserById } from "app/features/users/userSlice";
+import { SearchBox, AdminLoading } from "app/components"
 
 const IconButton = styled(Icon)({
     fontSize: '14px',
@@ -35,30 +33,24 @@ const CustomPagination = styled(Box)({
     marginBottom: 5,
 });
 
-const ProductManage = () => {
+const UserRestore = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { products, product, total, isLoading, isError, isSuccess, reload, message } = useSelector(
-        (state) => state.product
+    const { users, user, total, isLoading, isError, isSuccess, reload, message } = useSelector(
+        (state) => state.user
     );
 
     const limit = queryString.parse(location.search).limit || 6;
-    const queryParams = { ...queryString.parse(location.search), limit };
-    const [openPopupAdd, setOpenPopupAdd] = useState(false);
-    const [openPopupUpdate, setOpenPopupUpdate] = useState(false);
-    const [openConfirm, setOpenConfirm] = useState(false);
-    const [selectedIdProduct, setSelectedIdProduct] = useState(0)
-    const [selectedCodeProduct, setSelectedCodeProduct] = useState(0)
-    const [action, setAction] = useState(0)
+    const queryParams = { ...queryString.parse(location.search), limit, track: true };
 
     useEffect(() => {
         (async () => {
             try {
-                dispatch(getProducts(queryParams));
-                // const { product, total } = result.payload;
-                // setProductList(results);
+                dispatch(getUsers(queryParams));
+                // const { user, total } = result.payload;
+                // setUserList(results);
             } catch (error) {
                 toast.error(error)
             }
@@ -105,27 +97,6 @@ const ProductManage = () => {
         }
     };
 
-    const handleCategorySort = (id) => {
-        try {
-            const path = location.pathname;
-            let newParams = {};
-            if (id) {
-                newParams = { ...queryParams, page: 1, category: id };
-            } else {
-                const { category, page, ...rest } = queryParams;
-                newParams = rest;
-            }
-
-            const newLocation = {
-                pathname: path,
-                search: queryString.stringify(newParams),
-            };
-            navigate(newLocation);
-        } catch (error) {
-            toast.error(error)
-        }
-    };
-
     const handleSearch = (value) => {
         try {
             const path = location.pathname;
@@ -148,22 +119,6 @@ const ProductManage = () => {
         }
     };
 
-    const handleOpenConfirm = async (id, code, action) => {
-        setSelectedIdProduct(id)
-        setSelectedCodeProduct(code)
-        setAction(action)
-        setOpenConfirm(true)
-    }
-
-    const handleOpenUpdateModel = async (id) => {
-        await dispatch(getProductById(id));
-        await new Promise((res) => {
-            setTimeout(() => {
-                res();
-            }, 500);
-        });
-        setOpenPopupUpdate(true)
-    }
 
     let body = null
 
@@ -174,7 +129,7 @@ const ProductManage = () => {
             </Box>
         )
     }
-    else if (products.length === 0) {
+    else if (users.length === 0) {
         body = (
             <>
                 {/* <Card sx='text-center mx-5 my-5'> */}
@@ -188,34 +143,34 @@ const ProductManage = () => {
         body = (
             <>
                 <Divider />
-                {products.map(product => (
+                {users.map(user => (
                     <>
                         <Box sx={{ py: 4 }}>
                             <Grid container alignItems="center">
-                                <ProductOverview product={product} />
+                                <UserOverview user={user} />
                                 <Grid
                                     item
-                                    lg={2}
-                                    md={2}
-                                    sm={2}
-                                    xs={2}
+                                    lg={1}
+                                    md={1}
+                                    sm={1}
+                                    xs={1}
                                     sx={{ textAlign: 'center' }}
                                 >
+                                    {/* <Button
+                                        sx={{
+                                            "&:hover": {
+                                                backgroundColor: 'rgb(104, 98, 98)',
+                                            }
+                                        }}
+                                        onClick={handleOpenUpdateModel.bind(this, user._id)}
+                                    ><img src='https://cdn4.iconfinder.com/data/icons/buno-info-signs/32/__edit_new_compose-256.png' alt='edit' width='24' height='24' /></Button> */}
                                     <Button
                                         sx={{
                                             "&:hover": {
                                                 backgroundColor: 'rgb(104, 98, 98)',
                                             }
                                         }}
-                                        onClick={handleOpenUpdateModel.bind(this, product._id)}
-                                    ><img src='https://cdn4.iconfinder.com/data/icons/buno-info-signs/32/__edit_new_compose-256.png' alt='edit' width='24' height='24' /></Button>
-                                    <Button
-                                        sx={{
-                                            "&:hover": {
-                                                backgroundColor: 'rgb(104, 98, 98)',
-                                            }
-                                        }}
-                                        onClick={handleOpenConfirm.bind(this, product._id, product.code, 1)}
+                                    // onClick={handleOpenConfirm.bind(this, user._id, user.code, 1)}
                                     ><img src="https://cdn0.iconfinder.com/data/icons/ui-essence/32/_18ui-128.png" alt='delete' width='24' height='24' /></Button>
                                 </Grid>
                             </Grid>
@@ -235,7 +190,7 @@ const ProductManage = () => {
         <Box sx={{ m: 3 }}>
             <Grid container spacing={2}>
                 <Grid item md={22} xs={12}>
-                    {/* <ProductOverview /> */}
+                    {/* <UserOverview /> */}
 
                     <Card sx={{ p: 0.5 }}>
                         {/* <Box sx="mb-1 flex justify-between items-center"> */}
@@ -246,7 +201,7 @@ const ProductManage = () => {
                             alignItems: 'center',
                         }}
                         >
-                            <h3 sx={{ fontSize: "medium" }}>Quản lý sản phẩm</h3>
+                            <h4 sx={{ fontSize: "medium" }}>Quản lý người dùng</h4>
                         </Box>
 
                         <Divider sx={{ mb: 6 }} />
@@ -261,28 +216,16 @@ const ProductManage = () => {
                         }}
                         >
                             <Box sx={{ display: 'flex' }}>
-                                <FilterBy
-                                    handleTypeSort={handleTypeSort}
-                                    handleCategorySort={handleCategorySort}
-                                />
-                                <Button variant="contained" color="success" sx={{ width: '24vh', textAlign: 'center', fontSize: '14px' }} to={'/products/restore'} as={Link}>
-                                    Khôi phục
+                                <Button variant="contained" color="success" sx={{ width: '24vh', textAlign: 'center', fontSize: '14px' }} to={'/users/manage'} as={Link}>
+                                    Quản lí
                                     <IconButton>
-                                        cloud_download
-                                    </IconButton>
-                                </Button>
-                                <Button variant="contained" color="success" sx={{ ml: '5%', width: '18vh', textAlign: 'center', fontSize: '14px' }} onClick={() => {
-                                    setOpenPopupAdd(true);
-                                }}>
-                                    Thêm
-                                    <IconButton>
-                                        control_point
+                                        bookmark
                                     </IconButton>
                                 </Button>
                             </Box>
 
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
-                                <SearchBox onChange={handleSearch} label={"sản phẩm"}/>
+                                <SearchBox onChange={handleSearch} label={"người dùng"} />
                             </Box>
                         </Box>
 
@@ -290,9 +233,9 @@ const ProductManage = () => {
                             <Box sx={{ minWidth: 600 }}>
                                 <Box sx={{ py: 0 }}>
                                     <Grid container>
-                                        <Grid item lg={4} md={4} sm={4} xs={4}>
+                                        <Grid item lg={3} md={3} sm={3} xs={3}>
                                             <Box sx={{ m: 0, fontWeight: 500 }}>
-                                                Chi tiết sản phẩm
+                                                Ảnh minh họa
                                             </Box>
                                         </Grid>
                                         <Grid
@@ -303,34 +246,34 @@ const ProductManage = () => {
                                             xs={2}
                                             sx={{ textAlign: 'center' }}
                                         >
-                                            <Box sx={{ m: 0, fontWeight: 500 }}>Phân loại</Box>
+                                            <Box sx={{ m: 0, fontWeight: 500 }}>Tên</Box>
                                         </Grid>
                                         <Grid
                                             item
-                                            lg={2}
-                                            md={2}
-                                            sm={2}
-                                            xs={2}
+                                            lg={3}
+                                            md={3}
+                                            sm={3}
+                                            xs={3}
                                             sx={{ textAlign: 'center' }}
                                         >
-                                            <Box sx={{ m: 0, fontWeight: 500 }}>Giá</Box>
+                                            <Box sx={{ m: 0, fontWeight: 500 }}>Email</Box>
                                         </Grid>
                                         <Grid
                                             item
-                                            lg={2}
-                                            md={2}
-                                            sm={2}
-                                            xs={2}
+                                            lg={3}
+                                            md={3}
+                                            sm={3}
+                                            xs={3}
                                             sx={{ textAlign: 'center' }}
                                         >
-                                            <Box sx={{ m: 0, fontWeight: 500 }}>Giảm giá</Box>
+                                            <Box sx={{ m: 0, fontWeight: 500 }}>Ngày tạo</Box>
                                         </Grid>
                                         <Grid
                                             item
-                                            lg={2}
-                                            md={2}
-                                            sm={2}
-                                            xs={2}
+                                            lg={1}
+                                            md={1}
+                                            sm={1}
+                                            xs={1}
                                             sx={{ textAlign: 'center' }}
                                         >
                                             <Box sx={{ m: 0, fontWeight: 500 }}>Thao tác</Box>
@@ -356,22 +299,6 @@ const ProductManage = () => {
 
                 </Grid>
             </Grid>
-            <AddProductModal
-                openPopup={openPopupAdd}
-                setOpenPopup={setOpenPopupAdd}
-            />
-            {product && openPopupUpdate && <UpdateProductModal
-                openPopup={openPopupUpdate}
-                setOpenPopup={setOpenPopupUpdate}
-                productData={product}
-            />}
-            <Confirm
-                openConfirm={openConfirm}
-                setOpenConfirm={setOpenConfirm}
-                idProduct={selectedIdProduct}
-                codeProduct={selectedCodeProduct}
-                action={action}
-            />
             {/* <ImagePreview
                 openPreview={true}
                 setOpenPreview={setShowPreview}
@@ -381,10 +308,10 @@ const ProductManage = () => {
     )
 }
 
-const dummyProductList = [
+const dummyUserList = [
     {
         code: 'AT-AT422',
-        image: 'https://aoxuanhe.com/upload/product/axh-150/ao-thun-nam-den-cao-cap-dep.jpg',
+        image: 'https://aoxuanhe.com/upload/user/axh-150/ao-thun-nam-den-cao-cap-dep.jpg',
         cost: 324.0,
         amount: 19999,
         realname: 'Áo thun nam',
@@ -417,7 +344,7 @@ const dummyProductList = [
     },
     {
         code: 'AT-AT422',
-        image: 'https://bizweb.dktcdn.net/thumb/1024x1024/100/345/647/products/6efd240964ac9cf2c5bd.jpg',
+        image: 'https://bizweb.dktcdn.net/thumb/1024x1024/100/345/647/users/6efd240964ac9cf2c5bd.jpg',
         cost: 454.0,
         amount: 84000,
         realname: 'Quần jean đen',
@@ -428,7 +355,7 @@ const dummyProductList = [
     },
     {
         code: 'AT-AT422',
-        image: 'https://salt.tikicdn.com/cache/w444/ts/product/93/45/82/8fa12430783fd326a5634c3d6a2c0273.png',
+        image: 'https://salt.tikicdn.com/cache/w444/ts/user/93/45/82/8fa12430783fd326a5634c3d6a2c0273.png',
         cost: 454.0,
         amount: 88888,
         realname: 'Áo bomber chất',
@@ -472,4 +399,4 @@ const dummyProductList = [
     },
 ]
 
-export default ProductManage
+export default UserRestore

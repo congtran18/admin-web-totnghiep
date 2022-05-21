@@ -4,22 +4,25 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import 'perfect-scrollbar/css/perfect-scrollbar.css'
 import * as serviceWorker from './serviceWorker'
-import { store } from 'app/features/store'
+import { store, persistor } from 'app/features/store'
 import { StyledEngineProvider } from '@mui/styled-engine'
 import { CssBaseline } from '@mui/material'
 import { Provider } from 'react-redux'
 import { SettingsProvider } from 'app/contexts/SettingsContext'
+import { PersistGate } from 'redux-persist/integration/react';
 
 ReactDOM.render(
     <Provider store={store}>
-        <StyledEngineProvider injectFirst>
-            <BrowserRouter>
-                <CssBaseline />
-                <SettingsProvider>
-                    <App />
-                </SettingsProvider>
-            </BrowserRouter>
-        </StyledEngineProvider>
+        <PersistGate loading={null} persistor={persistor}>
+            <StyledEngineProvider injectFirst>
+                <BrowserRouter>
+                    <CssBaseline />
+                    <SettingsProvider>
+                        <App />
+                    </SettingsProvider>
+                </BrowserRouter>
+            </StyledEngineProvider>
+        </PersistGate>
     </Provider>,
     document.getElementById('root')
 )

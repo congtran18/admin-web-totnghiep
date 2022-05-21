@@ -19,7 +19,7 @@ const register = async (userData) => {
 const login = async (userData) => {
   const response = await api.post("/auth/login", userData);
 
-  if (response.data && response.data.role === ("owner" || "admin")) {
+  if (response.data && (response.data.role === "owner" || response.data.role === "admin")) {
     localStorage.setItem("user", JSON.stringify(response.data));
     toast.success("Đăng nhập thành công!");
     return response.data
@@ -31,7 +31,7 @@ const login = async (userData) => {
 
 // Logout user
 const logout = () => {
-  localStorage.removeItem("user");
+  // localStorage.removeItem("user");
 };
 
 const authService = {
