@@ -80,7 +80,7 @@ const JwtLogin = () => {
         }
 
         if (user) {
-            navigate("/");
+            navigate("/products/manage");
         }
 
         dispatch(resetAll());

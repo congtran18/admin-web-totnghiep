@@ -135,17 +135,17 @@ const Layout1Topbar = () => {
                             <Icon>mail_outline</Icon>
                         </StyledIconButton>
 
-                        <StyledIconButton>
+                        {/* <StyledIconButton>
                             <Icon>web_asset</Icon>
                         </StyledIconButton>
 
                         <StyledIconButton>
                             <Icon>star_outline</Icon>
-                        </StyledIconButton>
+                        </StyledIconButton> */}
                     </IconBox>
                 </Box>
                 <Box display="flex" alignItems="center">
-                    <AdminSearchBox />
+                    {/* <AdminSearchBox /> */}
                     <NotificationProvider>
                         <NotificationBar />
                     </NotificationProvider>
@@ -170,22 +170,22 @@ const Layout1Topbar = () => {
                         <StyledItem>
                             <Link to="/">
                                 <Icon> home </Icon>
-                                <Span> Home </Span>
+                                <Span> Trang chủ </Span>
                             </Link>
                         </StyledItem>
                         <StyledItem>
                             <Link to="/page-layouts/user-profile">
-                                <Icon> person </Icon>
-                                <Span> Profile </Span>
+                                <Icon> chat </Icon>
+                                <Span> Tin nhắn </Span>
                             </Link>
                         </StyledItem>
-                        <StyledItem>
+                        {/* <StyledItem>
                             <Icon> settings </Icon>
                             <Span> Settings </Span>
-                        </StyledItem>
+                        </StyledItem> */}
                         <StyledItem onClick={haveLogout}>
                             <Icon> power_settings_new </Icon>
-                            <Span> Logout </Span>
+                            <Span> Đăng xuất </Span>
                         </StyledItem>
                     </AdminMenu>
                 </Box>

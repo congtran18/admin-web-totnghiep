@@ -14,7 +14,9 @@ import typeReducer from "./types/typeSlice";
 import storageReducer from "./storage/storageSlice";
 import productReducer from "./products/productSlice";
 import userReducer from "./users/userSlice";
+import tutorReducer from "./tutors/tutorSlice";
 import orderReducer from "./orders/orderSlice";
+import warningTutorReducer from './warningTutors/warningTutorSlice'
 import storage from 'redux-persist/lib/storage'
 
 const persistConfig = {
@@ -23,7 +25,7 @@ const persistConfig = {
   storage,
 }
 
-const rootReducer = combineReducers({auth: authReducer, type: typeReducer, storage: storageReducer, product: productReducer, user: userReducer, order: orderReducer})
+const rootReducer = combineReducers({auth: authReducer, type: typeReducer, storage: storageReducer, product: productReducer, user: userReducer, tutor: tutorReducer, order: orderReducer, warningTutor : warningTutorReducer})
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({

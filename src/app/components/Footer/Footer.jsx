@@ -55,15 +55,15 @@ const Footer = () => {
             >
                 <AppFooter>
                     <FooterContent>
-                        <a href="https://ui-lib.com/downloads/Admin-pro-react-admin/">
+                        {/* <a href="https://ui-lib.com/downloads/Admin-pro-react-admin/">
                             <Button variant="contained" color="secondary">
                                 Get Admin Pro
                             </Button>
-                        </a>
+                        </a> */}
                         <Span sx={{ m: "auto" }}></Span>
-                        <Paragraph sx={{ m: 0 }}>
-                            Design and Developed by{' '}
-                            <a href="http://ui-lib.com">UI Lib</a>
+                        <Paragraph sx={{ m: 0,  flexGrow: 1, textAlign: "center", fontSize: '1rem' }}>
+                            Web Admin quản lí
+                            {/* <a href="http://ui-lib.com">UI Lib</a> */}
                         </Paragraph>
                     </FooterContent>
                 </AppFooter>

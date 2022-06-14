@@ -12,7 +12,7 @@ const SecondarySidebar = () => {
     return (
         <SecondarySidenavTheme theme={secondarySidebarTheme}>
             {settings.secondarySidebar.open && <SecondarySidebarContent />}
-            <SecondarySidebarToggle />
+            {/* <SecondarySidebarToggle /> */}
         </SecondarySidenavTheme>
     )
 }

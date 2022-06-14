@@ -27,7 +27,7 @@ const Brand = ({ children }) => {
             <Box display="flex" alignItems="center">
                 <AdminLogo />
                 <StyledSpan mode={mode} className="sidenavHoverShow">
-                    Admin
+                    Web Admin
                 </StyledSpan>
             </Box>
             <Box

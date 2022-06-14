@@ -37,8 +37,6 @@ const getUsers = async (token, params) => {
 
   const response = await api.get("/users/search", { params }, config);
 
-  console.log("response.data.role_user",response.data[0])
-
   return response.data[0]
 };
 
@@ -67,8 +65,23 @@ const getUserById = async (token, id) => {
   return response.data;
 };
 
+const updateTimeUser = async (token, data) => {
+
+  const {id, ...res} = data
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await api.patch(`/users/update-time/${id}`, res, config);
+
+  return response.data;
+};
+
 // Delete user by id
-const trackUser = async (token ,id) => {
+const trackUser = async (token, id) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -98,6 +111,7 @@ const userService = {
   updateUser,
   getUsers,
   getRestoreUsers,
+  updateTimeUser,
   trackUser,
   removeUser,
   getUserById

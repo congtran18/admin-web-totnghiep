@@ -112,6 +112,24 @@ export const getUserById = createAsyncThunk(
   }
 );
 
+export const updateTimeUser = createAsyncThunk(
+  "users/updateTime",
+  async (data, thunkAPI) => {
+    try {
+      const token = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).auth).user.accessToken;
+      return await userService.updateTimeUser(token,data);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Track user
 export const trackUser = createAsyncThunk(
   "users/track",
@@ -188,7 +206,7 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.users.unshift(action.payload);
-        toast.success("Cập nhật sản phẩm thành công!");
+        toast.success("Cập nhật người dùng thành công!");
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -236,6 +254,16 @@ const userSlice = createSlice({
         // state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(updateTimeUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateTimeUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        toast.success("Cập nhật số phút học thành công!");
+      })
+      .addCase(updateTimeUser.rejected, (state, action) => {
+        state.isLoading = false;
       })
       .addCase(trackUser.pending, (state) => {
         state.isLoading = true;

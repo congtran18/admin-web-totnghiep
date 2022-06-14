@@ -86,14 +86,14 @@ const Layout1Sidenav = () => {
         >
             <NavListBox>
                 <Brand>
-                    <Hidden smDown>
+                    {/* <Hidden smDown>
                         <Switch
                             onChange={handleSidenavToggle}
                             checked={leftSidebar.mode !== 'full'}
                             color="secondary"
                             size="small"
                         />
-                    </Hidden>
+                    </Hidden> */}
                 </Brand>
                 <Sidenav />
             </NavListBox>

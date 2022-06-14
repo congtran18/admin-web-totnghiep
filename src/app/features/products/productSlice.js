@@ -187,7 +187,11 @@ const productSlice = createSlice({
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // state.products.unshift(action.payload);
+        // const index = state.findIndex(product => product._id === action.payload._id);
+        // state[index] = {
+        //   ...state[index],
+        //   ...action.payload,
+        // };
         toast.success("Cập nhật sản phẩm thành công!");
       })
       .addCase(updateProduct.rejected, (state, action) => {

@@ -26,12 +26,17 @@ export const navigations = [
     {
         name: 'Quản lý gia sư',
         icon: 'person_pin',
-        path: '/users/manage',
+        path: '/tutors/manage',
     }, 
     {
         name: 'Quản lý người dùng',
         icon: 'people',
         path: '/users/manage',
+    }, 
+    {
+        name: 'Quản lý đơn tố cáo',
+        icon: 'report',
+        path: '/warnings/manage',
     }, 
     {
         name: 'Quản lý danh mục',

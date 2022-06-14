@@ -28,7 +28,7 @@ const NameAttribute = styled('p')({
 
 const Status = styled('big')(({ theme, mode }) => ({
     borderRadius: '1rem',
-    backgroundColor: mode === 'Mới' ? theme.palette.error.dark : mode === 'Bán chạy' ? theme.palette.info.main : theme.palette.text.disabled,
+    backgroundColor: mode === 'Mới' ? theme.palette.error.dark : mode === 'Nổi bật' ? theme.palette.info.main : theme.palette.text.disabled,
     color: 'rgb(255 255 255)',
     padding: '2px 0.5rem'
 }))

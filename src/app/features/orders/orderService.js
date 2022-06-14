@@ -36,8 +36,6 @@ const getOrders = async (token, params) => {
 
   const response = await api.get("/order/all", { params }, config);
 
-  console.log("response.data",response.data)
-
   return response.data;
 };
 
