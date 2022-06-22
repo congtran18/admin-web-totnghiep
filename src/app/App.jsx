@@ -1,4 +1,3 @@
-import '../fake-db'
 import React, { lazy } from 'react'
 import { Provider } from 'react-redux'
 import { AllPages } from './routes/routes'

@@ -21,12 +21,14 @@ import { toast } from "react-toastify";
 
 
 const listMonths = [
+    { 'realname': '0 tháng', '_id': '0' },
     { 'realname': '1 tháng', '_id': '30' },
     { 'realname': '3 tháng', '_id': '90' },
     { 'realname': '6 tháng', '_id': '180' },
 ]
 
 const listMinutes = [
+    { 'realname': '0 giây', '_id': '0' },
     { 'realname': '30 giây', '_id': '30000' },
     { 'realname': '50 giây', '_id': '50000' },
     { 'realname': '100 giây', '_id': '100000' },
