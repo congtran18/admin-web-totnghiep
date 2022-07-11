@@ -38,7 +38,7 @@ const Footer = () => {
     let footerTheme = createTheme({
         palette: {
             success: {
-                main: '#CD0000',
+                main: '#006600',
             },
             secondary: {
                 main: '#edf2ff',

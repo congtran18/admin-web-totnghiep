@@ -95,7 +95,7 @@ const NotificationBar = ({ container }) => {
         <Fragment>
             <IconButton onClick={handleDrawerToggle}>
                 <Badge color="secondary" badgeContent={notifications?.length}>
-                    <Icon sx={{ color: textColor }}>notifications</Icon>
+                    <Icon sx={{ color: "#FFCCFF" }}>notifications</Icon>
                 </Badge>
             </IconButton>
 

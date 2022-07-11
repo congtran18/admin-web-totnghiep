@@ -22,7 +22,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "app/features/auth/authSlice";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
-    color: theme.palette.text.primary,
+    color: "#FFCCFF",//oke
 }))
 
 const TopbarRoot = styled('div')(({ theme }) => ({
@@ -41,7 +41,7 @@ const TopbarContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    background: '#CD0000',
+    background: '#006600',
     [theme.breakpoints.down('sm')]: {
         paddingLeft: 16,
         paddingRight: 16,

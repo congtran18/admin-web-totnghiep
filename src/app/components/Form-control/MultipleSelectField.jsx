@@ -36,6 +36,8 @@ const Error = styled('p')(({ theme }) => ({
 const multipleOption = [
     'Logic',
     'Ghi nhớ',
+    'Trải nghiệm',
+    'Vui',
     'Mẹo',
     'Công thức',
 ]
